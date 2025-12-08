@@ -1,0 +1,6 @@
+id,email,full_name,age,active,created_date,tags
+1,john@example.com,John Doe,30,true,2024-01-15,"admin,user"
+2,jane@example.com,Jane Smith,25,false,2024-02-20,"user"
+3,bob@example.com,Bob Johnson,35,true,2024-03-10,"admin,moderator,user"
+4,alice@example.com,Alice Williams,28,true,2024-04-05,"user"
+5,charlie@example.com,Charlie Brown,42,false,2024-05-12,"user,premium"

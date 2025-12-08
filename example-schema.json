@@ -1,0 +1,37 @@
+{
+  "collections": {
+    "users": {
+      "source": "users.csv",
+      "mappings": {
+        "_id": {
+          "from": "id",
+          "type": "number"
+        },
+        "email": {
+          "from": "email",
+          "type": "string"
+        },
+        "name": {
+          "from": "full_name",
+          "type": "string"
+        },
+        "age": {
+          "from": "age",
+          "type": "number"
+        },
+        "isActive": {
+          "from": "active",
+          "type": "boolean"
+        },
+        "createdAt": {
+          "from": "created_date",
+          "type": "date"
+        },
+        "tags": {
+          "from": "tags",
+          "type": "array"
+        }
+      }
+    }
+  }
+}
