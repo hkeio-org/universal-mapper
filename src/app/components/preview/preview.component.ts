@@ -18,10 +18,7 @@ export class PreviewComponent {
 
   fields = computed(() => {
     const schema = this.schemaService.schema();
-    if (!schema) return [];
-
-    const collectionName = Object.keys(schema.collections)[0];
-    return Object.keys(schema.collections[collectionName].mappings);
+    return schema.mappings.map((m) => m.to);
   });
 
   formatValue(value: unknown): string {

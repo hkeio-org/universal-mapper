@@ -14,36 +14,30 @@ export class TransformationService {
     const schema = this.schemaService.schema();
     const csvData = this.csvParser.parsedData();
 
-    if (!schema || !csvData.length) {
+    if (!schema.mappings.length || !csvData.length) {
       return [];
     }
 
-    const collectionName = Object.keys(schema.collections)[0];
-    const collection = schema.collections[collectionName];
-
-    return csvData.map((row) => this.transformRow(row, collection.mappings));
+    return csvData.map((row) => this.transformRow(row, schema.mappings));
   });
 
   previewData = computed(() => this.transformedData().slice(0, 5));
 
   errors = signal<string[]>([]);
 
-  private transformRow(
-    row: Record<string, string>,
-    mappings: Record<string, FieldMapping>
-  ): TransformedDocument {
+  private transformRow(row: Record<string, string>, mappings: FieldMapping[]): TransformedDocument {
     const result: TransformedDocument = {};
 
-    for (const [targetField, mapping] of Object.entries(mappings)) {
+    for (const mapping of mappings) {
       const value = row[mapping.from];
 
       try {
-        result[targetField] = this.convertValue(value, mapping);
+        result[mapping.to] = this.convertValue(value, mapping);
       } catch (error) {
-        result[targetField] = mapping.default ?? null;
+        result[mapping.to] = mapping.default ?? null;
         this.errors.update((errors) => [
           ...errors,
-          `Failed to convert ${mapping.from} to ${targetField}: ${(error as Error).message}`,
+          `Failed to convert ${mapping.from} to ${mapping.to}: ${(error as Error).message}`,
         ]);
       }
     }

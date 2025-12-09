@@ -1,37 +1,39 @@
 {
-  "collections": {
-    "users": {
-      "source": "users.csv",
-      "mappings": {
-        "_id": {
-          "from": "id",
-          "type": "number"
-        },
-        "email": {
-          "from": "email",
-          "type": "string"
-        },
-        "name": {
-          "from": "full_name",
-          "type": "string"
-        },
-        "age": {
-          "from": "age",
-          "type": "number"
-        },
-        "isActive": {
-          "from": "active",
-          "type": "boolean"
-        },
-        "createdAt": {
-          "from": "created_date",
-          "type": "date"
-        },
-        "tags": {
-          "from": "tags",
-          "type": "array"
-        }
-      }
+  "mappings": [
+    {
+      "from": "id",
+      "to": "_id",
+      "type": "number"
+    },
+    {
+      "from": "email",
+      "to": "email",
+      "type": "string"
+    },
+    {
+      "from": "full_name",
+      "to": "name",
+      "type": "string"
+    },
+    {
+      "from": "age",
+      "to": "age",
+      "type": "number"
+    },
+    {
+      "from": "active",
+      "to": "isActive",
+      "type": "boolean"
+    },
+    {
+      "from": "created_date",
+      "to": "createdAt",
+      "type": "date"
+    },
+    {
+      "from": "tags",
+      "to": "tags",
+      "type": "array"
     }
-  }
+  ]
 }

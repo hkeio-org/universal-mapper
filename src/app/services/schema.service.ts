@@ -1,12 +1,11 @@
 import { Injectable, signal } from '@angular/core';
-import { MappingSchema } from '../models/mapping.model';
+import { FieldMapping, MappingSchema } from '../models/mapping.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchemaService {
-  schema = signal<MappingSchema | null>(null);
-  schemaFileName = signal<string>('');
+  schema = signal<MappingSchema>({ mappings: [] });
 
   loadSchema(file: File): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -18,7 +17,6 @@ export class SchemaService {
           const schema = JSON.parse(text) as MappingSchema;
           this.validateSchema(schema);
           this.schema.set(schema);
-          this.schemaFileName.set(file.name);
           resolve();
         } catch (error) {
           reject(error);
@@ -30,32 +28,51 @@ export class SchemaService {
     });
   }
 
+  setSchema(schema: MappingSchema): void {
+    this.schema.set(schema);
+  }
+
+  addMapping(mapping: FieldMapping): void {
+    this.schema.update((s) => ({
+      mappings: [...s.mappings, mapping],
+    }));
+  }
+
+  removeMapping(index: number): void {
+    this.schema.update((s) => ({
+      mappings: s.mappings.filter((_, i) => i !== index),
+    }));
+  }
+
+  updateMapping(index: number, mapping: FieldMapping): void {
+    this.schema.update((s) => ({
+      mappings: s.mappings.map((m, i) => (i === index ? mapping : m)),
+    }));
+  }
+
   private validateSchema(schema: MappingSchema): void {
-    if (!schema.collections || typeof schema.collections !== 'object') {
-      throw new Error('Invalid schema: missing collections object');
+    if (!schema.mappings || !Array.isArray(schema.mappings)) {
+      throw new Error('Invalid schema: missing mappings array');
     }
 
-    for (const [collectionName, collection] of Object.entries(schema.collections)) {
-      if (!collection.source) {
-        throw new Error(`Invalid schema: collection "${collectionName}" missing source`);
+    for (const [index, mapping] of schema.mappings.entries()) {
+      if (!mapping.from) {
+        throw new Error(`Invalid schema: mapping ${index} missing from property`);
       }
-      if (!collection.mappings || typeof collection.mappings !== 'object') {
-        throw new Error(`Invalid schema: collection "${collectionName}" missing mappings`);
+      if (!mapping.to) {
+        throw new Error(`Invalid schema: mapping ${index} missing to property`);
       }
-
-      for (const [fieldName, mapping] of Object.entries(collection.mappings)) {
-        if (!mapping.from) {
-          throw new Error(`Invalid schema: field "${fieldName}" missing from property`);
-        }
-        if (!mapping.type) {
-          throw new Error(`Invalid schema: field "${fieldName}" missing type property`);
-        }
+      if (!mapping.type) {
+        throw new Error(`Invalid schema: mapping ${index} missing type property`);
       }
     }
   }
 
   clear(): void {
-    this.schema.set(null);
-    this.schemaFileName.set('');
+    this.schema.set({ mappings: [] });
+  }
+
+  exportSchema(): string {
+    return JSON.stringify(this.schema(), null, 2);
   }
 }

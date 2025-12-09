@@ -34,12 +34,9 @@ export class ExportComponent {
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    const schema = this.schemaService.schema();
-    const collectionName = schema ? Object.keys(schema.collections)[0] : 'export';
-
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${collectionName}-mongodb.json`;
+    link.download = 'mongodb-export.json';
     link.click();
 
     URL.revokeObjectURL(url);
