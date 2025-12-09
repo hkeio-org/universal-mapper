@@ -1,0 +1,50 @@
+<div class="schema-container">
+  <div
+    class="drop-zone"
+    [class.drag-over]="isDragOver"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()"
+  >
+    @if (schemaService.schemaFileName()) {
+    <div class="file-info">
+      <svg class="icon-success" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </svg>
+      <h3>{{ schemaService.schemaFileName() }}</h3>
+      <p>Mapping schema loaded</p>
+      <button class="btn-secondary" (click)="clear($event)">Clear</button>
+    </div>
+    } @else {
+    <div class="drop-prompt">
+      <svg class="icon-schema" viewBox="0 0 24 24">
+        <path
+          d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+        />
+      </svg>
+      <h3>Drop JSON schema here</h3>
+      <p>or click to browse</p>
+    </div>
+    }
+
+    <input
+      #fileInput
+      type="file"
+      accept=".json"
+      (change)="onFileSelected($event)"
+      style="display: none"
+    />
+  </div>
+
+  @if (schemaService.schema()) {
+  <div class="schema-preview">
+    <h4>Schema Preview</h4>
+    <pre>{{ formatSchema() }}</pre>
+  </div>
+  } @if (error()) {
+  <div class="error-message">
+    {{ error() }}
+  </div>
+  }
+</div>

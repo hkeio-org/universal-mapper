@@ -1,0 +1,39 @@
+<div class="export-container">
+  @if (canExport()) {
+  <div class="export-info">
+    <h3>Ready to Export</h3>
+    <p>{{ documentCount() }} documents ready for MongoDB</p>
+
+    <div class="export-actions">
+      <button class="btn-primary" (click)="exportJson()">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+        </svg>
+        Download JSON
+      </button>
+
+      <button class="btn-secondary" (click)="copyToClipboard()">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path
+            d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+          />
+        </svg>
+        Copy to Clipboard
+      </button>
+    </div>
+
+    @if (copied()) {
+    <div class="success-message">✓ Copied to clipboard!</div>
+    }
+  </div>
+
+  <div class="json-preview">
+    <h4>JSON Preview</h4>
+    <pre>{{ jsonPreview() }}</pre>
+  </div>
+  } @else {
+  <div class="empty-state">
+    <p>Complete the transformation to export data</p>
+  </div>
+  }
+</div>

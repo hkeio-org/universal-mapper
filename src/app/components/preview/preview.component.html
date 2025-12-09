@@ -1,0 +1,48 @@
+<div class="preview-container">
+  @if (hasData()) {
+  <div class="preview-header">
+    <h3>Preview (First 5 Rows)</h3>
+    <span class="total-count">Total: {{ totalCount() }} documents</span>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          @for (field of fields(); track field) {
+          <th>{{ field }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (doc of transformService.previewData(); track $index) {
+        <tr>
+          <td>{{ $index + 1 }}</td>
+          @for (field of fields(); track field) {
+          <td>{{ formatValue(doc[field]) }}</td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (transformService.errors().length > 0) {
+  <div class="errors-section">
+    <h4>Transformation Warnings</h4>
+    <ul>
+      @for (error of transformService.errors().slice(0, 10); track $index) {
+      <li>{{ error }}</li>
+      }
+    </ul>
+    @if (transformService.errors().length > 10) {
+    <p class="more-errors">... and {{ transformService.errors().length - 10 }} more</p>
+    }
+  </div>
+  } } @else {
+  <div class="empty-state">
+    <p>Upload CSV and JSON schema to see preview</p>
+  </div>
+  }
+</div>

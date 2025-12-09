@@ -1,0 +1,30 @@
+<div class="app-container">
+  <header>
+    <h1>Universal Mapper</h1>
+    <p>Transform any CSV exports to MongoDB JSON</p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>1. Upload CSV</h2>
+        <app-csv-upload />
+      </div>
+
+      <div class="card">
+        <h2>2. Upload Schema</h2>
+        <app-schema-upload />
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Preview</h2>
+      <app-preview />
+    </div>
+
+    <div class="card">
+      <h2>4. Export</h2>
+      <app-export />
+    </div>
+  </main>
+</div>
